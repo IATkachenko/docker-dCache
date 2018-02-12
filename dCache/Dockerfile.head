@@ -1,0 +1,17 @@
+FROM dcache
+RUN yum install -y openssh
+
+RUN mkdir -p /etc/dcache/admin/
+RUN ssh-keygen -f /etc/dcache/admin/ssh_host_rsa_key -N "" -t rsa
+RUN ssh-keygen -f /etc/dcache/admin/ssh_host_dsa_key -N "" -t dsa
+RUN chmod 600 /etc/dcache/admin/*_key
+COPY docker.pub /etc/dcache/admin/authorized_keys2
+RUN chown dcache:dcache /etc/dcache/admin -R
+
+RUN mkdir -p  /etc/grid-security/vomsdir
+COPY storage-authzdb /etc/grid-security/
+COPY gplazma.conf /etc/dcache/
+
+COPY head.conf /etc/dcache/layouts/docker.conf
+RUN dcache check-config
+

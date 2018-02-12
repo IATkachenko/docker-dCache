@@ -1,0 +1,81 @@
+version: '3.3'
+services:
+  dcache:
+    container_name: dcache
+    image: dcache
+    build: 
+      context: dCache
+      dockerfile: Dockerfile.dCache
+    command: '/bin/true'
+
+  zoo:
+    container_name: zoo
+    image: zookeeper
+    restart: always
+    hostname: zoo.docker
+    environment:
+      - ZOO_MY_ID=1
+      - ZOO_STANDALONE_ENABLED=true
+
+  db:
+    container_name: db
+    image: postgres:9.4
+    volumes: 
+      - ./db:/var/lib/postgresql/data
+      - ./docker-postgresql-multiple-databases:/docker-entrypoint-initdb.d
+    environment:
+      - POSTGRES_USER=dcache
+      - POSTGRES_PASSWORD=
+      - POSTGRES_MULTIPLE_DATABASES=chimera,billing
+
+  head:
+    container_name: head
+    image: dcache_head
+    hostname: head.docker
+    build:
+      context: dCache
+      dockerfile: Dockerfile.head
+    depends_on:
+      - db
+      - zoo
+    ports:
+      - 22224:22224
+      - 2288:2288
+
+  pm:
+    container_name: pm
+    image: dcache_pm
+    hostname: pm.docker
+    build:
+      context: dCache
+      dockerfile: Dockerfile.pm
+    depends_on:
+      - head
+      - zoo
+
+  ns:
+    container_name: ns
+    image: dcache_ns
+    hostname: ns.docker
+    build:
+      context: dCache
+      dockerfile: Dockerfile.ns
+    depends_on:
+      - db
+      - head
+      - zoo
+
+  web_door:
+    container_name: web_door
+    image: dcache_web
+    hostname: web.docker
+    build:
+      context: dCache
+      dockerfile: Dockerfile.web
+    depends_on:
+      - db
+      - head
+      - ns
+      - zoo
+    ports:
+      - 2880:2880

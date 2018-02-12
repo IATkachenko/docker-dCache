@@ -1,0 +1,9 @@
+FROM centos:6
+COPY dcache-4.0.3-1.noarch.rpm /tmp
+COPY jdk-8u111-linux-x64.rpm /tmp
+RUN yum localinstall -y /tmp/dcache-4.0.3-1.noarch.rpm /tmp/jdk-8u111-linux-x64.rpm
+COPY dcache.conf /etc/dcache/dcache.conf
+COPY all.conf /etc/dcache/layouts/docker.conf
+RUN dcache check-config
+
+CMD dcache start && dcache status && sleep 1h
