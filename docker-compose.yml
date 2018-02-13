@@ -79,3 +79,19 @@ services:
       - zoo
     ports:
       - 2880:2880
+
+  pool:
+    container_name: pool
+    image: dcache_pool
+    hostname: pool
+    build:
+      context: dCache
+      dockerfile: Dockerfile.pool
+    depends_on:
+      - zoo
+      - pm
+      - web_door
+    volumes:
+      - ./data:/pool_data
+    command: /bin/bash -c '[ ! -d "/pool_data/dcache/data" ] && echo "[poolDomain]" > /etc/dcache/layout/docker.conf && dcache pool create /pool_data/dcache pool poolDomain; dcache start; dcache status; sleep 1h'
+    
