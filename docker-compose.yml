@@ -31,7 +31,7 @@ services:
   head:
     container_name: head
     image: dcache_head
-    hostname: head.docker
+    hostname: head
     build:
       context: dCache
       dockerfile: Dockerfile.head
@@ -45,7 +45,7 @@ services:
   pm:
     container_name: pm
     image: dcache_pm
-    hostname: pm.docker
+    hostname: pm
     build:
       context: dCache
       dockerfile: Dockerfile.pm
@@ -56,7 +56,7 @@ services:
   ns:
     container_name: ns
     image: dcache_ns
-    hostname: ns.docker
+    hostname: ns
     build:
       context: dCache
       dockerfile: Dockerfile.ns
@@ -68,7 +68,7 @@ services:
   web_door:
     container_name: web_door
     image: dcache_web
-    hostname: web.docker
+    hostname: web
     build:
       context: dCache
       dockerfile: Dockerfile.web
