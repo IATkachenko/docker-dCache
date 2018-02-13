@@ -1,6 +1,8 @@
 FROM centos:6
-COPY dcache-4.0.3-1.noarch.rpm /tmp/dcache.rpm
-COPY jdk-8u111-linux-x64.rpm /tmp/jdk.rpm
+ENV DCACHE_RPM 'dcache-4.0.3-1.noarch.rpm'
+ENV JDK_RPM 'jdk-8u111-linux-x64.rpm'
+COPY ${DCACHE_RPM} /tmp/dcache.rpm
+COPY ${JDK_RPM} /tmp/jdk.rpm
 RUN yum localinstall -y /tmp/dcache.rpm /tmp/jdk.rpm
 COPY dcache.conf /etc/dcache/dcache.conf
 COPY all.conf /etc/dcache/layouts/docker.conf
