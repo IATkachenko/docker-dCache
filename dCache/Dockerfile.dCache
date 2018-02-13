@@ -1,6 +1,6 @@
 FROM centos:6
 ENV DCACHE_RPM 'dcache-4.0.3-1.noarch.rpm'
-ENV JDK_RPM 'jdk-8u111-linux-x64.rpm'
+ENV JDK_RPM 'jdk-8u162-linux-x64.rpm'
 COPY ${DCACHE_RPM} /tmp/dcache.rpm
 COPY ${JDK_RPM} /tmp/jdk.rpm
 RUN yum localinstall -y /tmp/dcache.rpm /tmp/jdk.rpm
